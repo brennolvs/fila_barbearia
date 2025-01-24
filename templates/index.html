@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciador de Fila - Barbearia</title>
+    <style>
+        /* Corpo da página */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f9;
+            overflow-x: hidden; /* Impede rolagem horizontal */
+        }
+    
+        /* Container da página */
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box; /* Garantir que o padding não afete a largura total */
+        }
+    
+        h1 {
+            text-align: center;
+            color: #333;
+            font-size: 24px;
+        }
+    
+        /* Estilos do formulário */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    
+        input, select, button {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%; /* Garante que os campos ocupem toda a largura disponível */
+        }
+    
+        button {
+            cursor: pointer;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    
+        /* Botão de Logout (vermelho e menor) */
+        .logout-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            width: auto;
+            align-self: center;
+            margin-bottom: 15px; /* Espaçamento abaixo */
+        }
+    
+        .logout-button:hover {
+            background-color: #c82333;
+        }
+    
+        /* Botão de Chamar Próximo Cliente (amarelo) */
+        .chamar-button {
+            background-color: #ffc107;
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 20px
+        }
+    
+        .chamar-button:hover {
+            background-color: #e0a800;
+        }
+    
+        /* Lista de clientes */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+    
+        li {
+            background: #f9f9f9;
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+    
+        /* Link de login */
+        .login-link {
+            text-align: center;
+            margin-top: 15px;
+        }
+    
+        .login-link a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-bottom: 20px
+        }
+    
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+    
+        /* Responsividade: Ajusta o tamanho da tela para dispositivos menores */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px;
+            }
+    
+            .container {
+                padding: 15px;
+            }
+    
+            input, select, button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciador de Fila</h1>
+
+        {% if is_barber %}
+            <!-- Botão de logout para o barbeiro -->
+            <form action="/logout" method="get">
+                <button type="submit" class="logout-button">Logout</button>
+            </form>
+            <!-- Botão de chamar próximo cliente -->
+            <form action="/chamar" method="get">
+                <button type="submit" class="chamar-button">Chamar Próximo Cliente</button>
+            </form>
+        {% else %}
+            <div class="login-link">
+                <a href="/login">Entrar como Barbeiro</a>
+            </div>
+        {% endif %}
+
+        <form action="/adicionar" method="post">
+            <input type="text" name="nome" placeholder="Nome do Cliente" required>
+            <input type="text" name="telefone" placeholder="Telefone (Opcional)">
+            <select name="servico" required>
+                <option value="">Selecione um Serviço</option>
+                <option value="Corte">Corte</option>
+                <option value="Corte + Pigmentação">Corte + Pigmentação</option>
+                <option value="Barba">Barba</option>
+                <option value="Combo">Corte + Barba</option>
+                <option value="Sobrancelha">Sobrancelha</option>
+            </select>
+            <button type="submit">Adicionar à Fila</button>
+        </form>
+
+        <h2>Fila Atual</h2>
+        <ul>
+            {% for cliente in fila %}
+                <li>
+                    {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if mensagem %}
+            <p><strong>{{ mensagem }}</strong></p>
+        {% endif %}
+    </div>
+</body>
+</html>
