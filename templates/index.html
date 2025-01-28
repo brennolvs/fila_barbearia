@@ -62,7 +62,8 @@
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 8px; /* Mais retangular */
+            border-radius: 8px;
+            /* Mais retangular */
         }
 
         /* Botão de Logout (vermelho e menor) */
@@ -70,10 +71,14 @@
             background-color: #dc3545;
             color: white;
             border: none;
-            padding: 10px 18px; /* Ajustado */
-            font-size: 14px; /* Ajustado */
-            border-radius: 8px; /* Mais retangular */
-            width: 100%; /* Garante que ocupe a largura total */
+            padding: 10px 18px;
+            /* Ajustado */
+            font-size: 14px;
+            /* Ajustado */
+            border-radius: 8px;
+            /* Mais retangular */
+            width: 100%;
+            /* Garante que ocupe a largura total */
             margin-bottom: 15px;
         }
 
@@ -81,10 +86,14 @@
             background-color: #dc3545;
             color: white;
             border: none;
-            padding: 10px 18px; /* Ajustado */
-            font-size: 14px; /* Ajustado */
-            border-radius: 8px; /* Mais retangular */
-            width: 100%; /* Garante que ocupe a largura total */
+            padding: 10px 18px;
+            /* Ajustado */
+            font-size: 14px;
+            /* Ajustado */
+            border-radius: 8px;
+            /* Mais retangular */
+            width: 100%;
+            /* Garante que ocupe a largura total */
             margin-bottom: 15px;
         }
 
@@ -95,7 +104,8 @@
             border: none;
             padding: 10px;
             font-size: 16px;
-            border-radius: 8px; /* Mais retangular */
+            border-radius: 8px;
+            /* Mais retangular */
             width: 100%;
             margin-bottom: 20px;
         }
@@ -104,13 +114,19 @@
             background-color: green;
             color: white;
             border: none;
-            padding: 10px 18px; /* Ajustado */
-            font-size: 14px; /* Ajustado */
-            border-radius: 8px; /* Mais retangular */
-            width: 100%; /* Garante que ocupe a largura total */
+            padding: 10px 18px;
+            /* Ajustado */
+            font-size: 14px;
+            /* Ajustado */
+            border-radius: 8px;
+            /* Mais retangular */
+            width: 100%;
+            /* Garante que ocupe a largura total */
             margin-bottom: 15px;
-            white-space: nowrap; /* Evita quebra de linha */
-            text-align: center; /* Centraliza o texto */
+            white-space: nowrap;
+            /* Evita quebra de linha */
+            text-align: center;
+            /* Centraliza o texto */
         }
 
         .chamar-button:hover {
@@ -129,8 +145,10 @@
         /* Botões */
         .logout-button,
         .refresh-button {
-            width: 100%; /* Garante que ocupe a largura total */
-            max-width: 100%; /* Limita a largura máxima */
+            width: 100%;
+            /* Garante que ocupe a largura total */
+            max-width: 100%;
+            /* Limita a largura máxima */
         }
 
         /* Lista de clientes */
@@ -260,6 +278,10 @@
             </li>
             {% endfor %}
         </ul>
+        
+        {% if mensagem %}
+        <p><strong>{{ mensagem }}</strong></p>
+        {% endif %}
     </div>
 </body>
 
