@@ -36,8 +36,9 @@ def chamar_cliente():
     if fila:
         proximo = fila.pop(0)
         mensagem = f"Chamar: {proximo['nome']} ({proximo['telefone']}) - Serviço: {proximo['servico']}"
-        return redirect(url_for('index', mensagem=mensagem))  # Redireciona para a página principal com a mensagem
+        return redirect(url_for('index', mensagem=mensagem, cliente_atual=proximo))  # Passando o cliente chamado para o template
     return render_template('index.html', fila=fila, mensagem="A fila está vazia.", is_barber=True)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
