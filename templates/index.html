@@ -121,7 +121,9 @@
             background-color: #fff3cd;
             word-wrap: break-word;
             word-break: break-word;
-            max-width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
         }
 
 
@@ -199,13 +201,21 @@
         </form>
 
         <h2>Fila Atual</h2>
+
+        {% if cliente_atual %}
+            <div class="cliente-atual">
+                Cliente da vez: {{ cliente_atual['nome'] }} - {{ cliente_atual['telefone'] }} ({{ cliente_atual['servico'] }})
+            </div>
+        {% endif %}
+        
         <ul>
             {% for cliente in fila %}
-            <li class="{% if cliente_atual and cliente['nome'] == cliente_atual %}cliente-atual{% endif %}">
-                {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
-            </li>
+                <li class="{% if cliente_atual and cliente['nome'] == cliente_atual['nome'] %}cliente-atual{% endif %}">
+                    {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
+                </li>
             {% endfor %}
         </ul>
+        
 
         {% if mensagem %}
         <p><strong>{{ mensagem }}</strong></p>

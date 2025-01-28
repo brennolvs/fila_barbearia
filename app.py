@@ -6,13 +6,14 @@ app.secret_key = 'secret_key_for_session_management'
 
 # Lista para armazenar os clientes na fila
 fila = []
+cliente_atual = None  # Variável global para armazenar o cliente em destaque
 
 # Rota principal para exibir a fila
 @app.route('/')
 def index():
+    global cliente_atual  # Acessando a variável global
     is_barber = session.get('is_barber', False)
-    cliente_atual = session.get('cliente_atual', None)  # Recupera o cliente atual da sessão
-    return render_template('index.html', fila=fila, is_barber=is_barber, cliente_atual=cliente_atual)
+    return render_template('index.html', fila=fila, cliente_atual=cliente_atual, is_barber=is_barber)
 
 # Rota para adicionar cliente à fila
 @app.route('/adicionar', methods=['POST'])
@@ -31,21 +32,21 @@ def adicionar_cliente():
 # Rota para chamar o próximo cliente (somente barbeiro)
 @app.route('/chamar', methods=['POST'])
 def chamar_cliente():
+    global cliente_atual  # Acessando a variável global
     # Verifique se há clientes na fila
     if fila:
         cliente_atual = fila.pop(0)  # Pega o primeiro cliente da fila
-        session['cliente_atual'] = cliente_atual['nome']  # Armazena o nome do cliente atual na sessão
         mensagem = f"Cliente {cliente_atual['nome']} chamado!"
     else:
         cliente_atual = None  # Caso não haja clientes, defina como None
-        session['cliente_atual'] = None  # Garante que o cliente atual seja removido
         mensagem = "Não há clientes na fila."
     
+    # Passando cliente_atual para o template, mesmo que seja None
     return render_template('index.html', fila=fila, cliente_atual=cliente_atual, mensagem=mensagem, is_barber=True)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print("Acesso a página de login")
     if request.method == 'POST':
         senha = request.form.get('senha')
         if senha == 'barbeiro123':  # Senha fixa para o barbeiro
@@ -61,7 +62,6 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('is_barber', None)
-    session.pop('cliente_atual', None)  # Remove o cliente atual da sessão ao fazer logout
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
