@@ -28,15 +28,17 @@ def adicionar_cliente():
     return redirect(url_for('index'))
 
 # Rota para chamar o próximo cliente (somente barbeiro)
-@app.route('/chamar')
+@app.route('/chamar', methods=['POST'])
 def chamar_cliente():
     if not session.get('is_barber', False):
         return redirect(url_for('login_page'))
 
     if fila:
         proximo = fila.pop(0)
-        return render_template('index.html', fila=fila, mensagem=f"Chamar: {proximo['nome']} ({proximo['telefone']}) - Serviço: {proximo['servico']}", is_barber=True)
+        mensagem = f"Chamar: {proximo['nome']} ({proximo['telefone']}) - Serviço: {proximo['servico']}"
+        return redirect(url_for('index', mensagem=mensagem))  # Redireciona para a página principal com a mensagem
     return render_template('index.html', fila=fila, mensagem="A fila está vazia.", is_barber=True)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
