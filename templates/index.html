@@ -196,11 +196,12 @@
         <h2>Fila Atual</h2>
         <ul>
             {% for cliente in fila %}
-            <li class="{% if cliente_atual and cliente['nome'] == cliente_atual['nome'] %}cliente-atual{% endif %}">
-                {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
-            </li>
+                <li class="{% if cliente_atual and cliente['nome'] == cliente_atual['nome'] %}cliente-atual{% endif %}">
+                    {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
+                </li>
             {% endfor %}
         </ul>
+        
 
 
 
