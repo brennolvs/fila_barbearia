@@ -30,14 +30,17 @@ def adicionar_cliente():
 # Rota para chamar o próximo cliente (somente barbeiro)
 @app.route('/chamar', methods=['POST'])
 def chamar_cliente():
+    # Verifique se há clientes na fila
     if fila:
         cliente_atual = fila.pop(0)  # Pega o primeiro cliente da fila
         mensagem = f"Cliente {cliente_atual['nome']} chamado!"
     else:
-        cliente_atual = None
+        cliente_atual = None  # Caso não haja clientes, defina como None
         mensagem = "Não há clientes na fila."
     
+    # Passando cliente_atual para o template, mesmo que seja None
     return render_template('index.html', fila=fila, cliente_atual=cliente_atual, mensagem=mensagem, is_barber=True)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
