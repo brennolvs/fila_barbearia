@@ -11,7 +11,8 @@ fila = []
 @app.route('/')
 def index():
     is_barber = session.get('is_barber', False)
-    return render_template('index.html', fila=fila, is_barber=is_barber)
+    cliente_atual = session.get('cliente_atual', None)  # Recupera o cliente atual da sessão
+    return render_template('index.html', fila=fila, is_barber=is_barber, cliente_atual=cliente_atual)
 
 # Rota para adicionar cliente à fila
 @app.route('/adicionar', methods=['POST'])
@@ -33,14 +34,14 @@ def chamar_cliente():
     # Verifique se há clientes na fila
     if fila:
         cliente_atual = fila.pop(0)  # Pega o primeiro cliente da fila
+        session['cliente_atual'] = cliente_atual['nome']  # Armazena o nome do cliente atual na sessão
         mensagem = f"Cliente {cliente_atual['nome']} chamado!"
     else:
         cliente_atual = None  # Caso não haja clientes, defina como None
+        session['cliente_atual'] = None  # Garante que o cliente atual seja removido
         mensagem = "Não há clientes na fila."
     
-    # Passando cliente_atual para o template, mesmo que seja None
     return render_template('index.html', fila=fila, cliente_atual=cliente_atual, mensagem=mensagem, is_barber=True)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -60,6 +61,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('is_barber', None)
+    session.pop('cliente_atual', None)  # Remove o cliente atual da sessão ao fazer logout
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
