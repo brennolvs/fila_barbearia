@@ -44,6 +44,10 @@ def chamar_cliente():
     # Passando cliente_atual para o template, mesmo que seja None
     return render_template('index.html', fila=fila, cliente_atual=cliente_atual, mensagem=mensagem, is_barber=True)
 
+@app.route('/atualizar_fila', methods=['POST'])
+def atualizar_fila():
+    # A rota apenas renderiza novamente a página, atualizando a fila
+    return redirect(url_for('index'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
