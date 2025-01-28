@@ -115,7 +115,10 @@
         .cliente-atual {
             font-weight: bold;
             color: #ff6600;
+            background-color: #fff3cd;
+            /* Cor de fundo suave para destacar */
         }
+
 
         /* Link de login */
         .login-link {
@@ -193,12 +196,13 @@
         <h2>Fila Atual</h2>
         <ul>
             {% for cliente in fila %}
-                <li class="{% if cliente_atual and cliente['nome'] == cliente_atual['nome'] %}cliente-atual{% endif %}">
-                    {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
-                </li>
+            <li class="{% if cliente_atual and cliente['nome'] == cliente_atual['nome'] %}cliente-atual{% endif %}">
+                {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
+            </li>
             {% endfor %}
         </ul>
-        
+
+
 
 
         {% if mensagem %}
