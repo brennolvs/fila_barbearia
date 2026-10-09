@@ -2,6 +2,14 @@
 
 Aplicação web em Python com Flask para gerenciar a fila de atendimento de uma barbearia. O cliente entra numa fila virtual informando nome, telefone (opcional) e o serviço desejado. O barbeiro tem uma área protegida por senha para chamar o próximo cliente.
 
+## Motivação
+
+Todo projeto nasce de uma dor. A deste foi literal: horas sentado na barbearia, sem saber quantas pessoas estavam na minha frente nem quanto tempo ainda faltava, enquanto o barbeiro tentava lembrar de cabeça quem tinha chegado primeiro.
+
+Como na mesma época eu estava estudando Python, tive a ideia que todo desenvolvedor iniciante tem pelo menos uma vez: "isso aqui eu resolvo com código". E assim nasceu uma aplicação web para organizar a fila, poupar a paciência dos clientes e a memória do barbeiro.
+
+O plano era perfeito, com um único detalhe: o barbeiro nunca usou. A fila continuou do mesmo jeito, mas eu saí dessa história sabendo criar rotas, sessões e templates com Flask e colocar uma aplicação no ar. No fim, quem mais aproveitou a ideia fui eu.
+
 ## Funcionalidades
 
 ### Visão do cliente
