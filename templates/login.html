@@ -108,9 +108,9 @@
             <button type="submit">Entrar</button>
         </form>
 
-        {% if mensagem %}
+        {% for mensagem in get_flashed_messages() %}
             <p class="error-message">{{ mensagem }}</p>
-        {% endif %}
+        {% endfor %}
 
         <div class="back-link">
             <a href="/">Voltar para a Fila</a>

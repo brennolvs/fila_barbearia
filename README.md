@@ -1,67 +1,117 @@
-# 💈 Fila de Barbearia - Flask App
+# Fila de Barbearia
 
-Este é um mini projeto de gerenciamento de fila para barbearias desenvolvido em Python com o framework Flask. A aplicação permite que clientes entrem em uma fila virtual informando nome, telefone e o serviço desejado. O barbeiro possui uma área restrita (autenticada por senha) para chamar o próximo cliente da fila e gerenciar os atendimentos.
+Aplicação web em Python com Flask para gerenciar a fila de atendimento de uma barbearia. O cliente entra numa fila virtual informando nome, telefone (opcional) e o serviço desejado. O barbeiro tem uma área protegida por senha para chamar o próximo cliente.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
-### 👤 Visão do Cliente
-*   Visualizar a fila de espera em tempo real.
-*   Ver quem é o cliente que está sendo atendido no momento.
-*   Preencher um formulário simples para entrar na fila (Nome, Telefone e Serviço).
+### Visão do cliente
 
-### ✂️ Visão do Barbeiro (Área Logada)
-*   Sistema de login com senha fixa (`barbeiro123`).
-*   Botão exclusivo para chamar o próximo cliente (remove o primeiro da fila e o coloca em destaque).
-*   Visualização de informações completas de contato dos clientes na fila.
-*   Opção de logout para encerrar a sessão de gerenciamento.
+- Ver a fila de espera e o cliente que está sendo atendido no momento
+- Entrar na fila informando nome, telefone e serviço
+- Receber a confirmação da posição na fila
 
-## 🛠️ Tecnologias Utilizadas
+### Visão do barbeiro (área logada)
 
-*   **Python 3**
-*   **Flask** (Framework Web)
-*   **HTML5 / CSS3** (Interface do usuário através de templates Jinja2)
+- Login com senha
+- Chamar o próximo cliente, que sai da fila e fica em destaque
+- Ver o telefone dos clientes, que fica oculto para quem não está logado
+- Atualizar a fila e fazer logout
 
-## 📦 Como Instalar e Executar o Projeto
+## Tecnologias
 
-Siga os passos abaixo para rodar a aplicação na sua máquina local:
+- Python 3
+- Flask
+- Jinja2 (templates HTML)
+- HTML5 e CSS3
+- Gunicorn (servidor de produção)
 
-### 1. Clonar o Repositório
-```bash
-git clone https://github.com
-cd seu-repositorio
+## Arquitetura
+
+Toda a regra de negócio fica no back-end (`app.py`). Os templates apenas exibem os dados prontos que o servidor entrega:
+
+- A lista de serviços é definida no back-end, e o servidor só aceita os serviços dessa lista.
+- Os dados do cliente são validados no servidor: nome obrigatório, limites de tamanho e serviço válido.
+- O texto de cada cliente, sua posição na fila e a regra de exibir o telefone apenas para o barbeiro são resolvidos no servidor.
+- As rotas do barbeiro são protegidas no servidor. Não basta esconder o botão na tela.
+- Depois de cada ação, o servidor redireciona e exibe uma mensagem de retorno (padrão Post/Redirect/Get). Assim, atualizar a página não repete a ação.
+
+## Rotas
+
+| Método | Rota | Descrição | Acesso |
+|---|---|---|---|
+| GET | `/` | Exibe a fila e o cliente atual | Público |
+| POST | `/adicionar` | Adiciona um cliente à fila | Público |
+| POST | `/chamar` | Chama o próximo cliente | Barbeiro |
+| POST | `/atualizar_fila` | Recarrega a fila | Barbeiro |
+| GET/POST | `/login` | Login do barbeiro | Público |
+| GET | `/logout` | Encerra a sessão do barbeiro | Público |
+
+## Estrutura do projeto
+
+```
+fila_barbearia/
+├── app.py              # Rotas, validações e regras da fila
+├── templates/
+│   ├── index.html      # Tela da fila
+│   └── login.html      # Tela de login do barbeiro
+├── requirements.txt    # Dependências
+└── Procfile            # Comando de inicialização para deploy
 ```
 
-### 2. Configurar o Ambiente Virtual (Opcional, mas recomendado)
-```bash
-# No Linux/macOS:
-python3 -m venv venv
-source venv/bin/activate
+## Como executar localmente
 
-# No Windows:
-python -m venv venv
-venv\Scripts\activate
-```
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/brennolvs/fila_barbearia.git
+   cd fila_barbearia
+   ```
+2. Crie e ative um ambiente virtual (recomendado):
+   ```bash
+   # Linux/macOS
+   python3 -m venv venv
+   source venv/bin/activate
 
-### 3. Instalar as Dependências
-Como o projeto utiliza o Flask, você pode instalá-lo diretamente via pip:
-```bash
-pip install Flask
-```
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate
+   ```
+3. Instale as dependências:
+   ```bash
+   pip install -r requirements.txt
+   ```
+4. Execute a aplicação:
+   ```bash
+   python app.py
+   ```
+5. Acesse `http://localhost:5000`.
 
-### 4. Executar a Aplicação
-Execute o arquivo principal do projeto:
-```bash
-python app.py
-```
+## Variáveis de ambiente
 
-A aplicação estará disponível no seu navegador através do endereço: `http://localhost:5000`
+| Variável | Descrição | Valor padrão (apenas para desenvolvimento) |
+|---|---|---|
+| `SENHA_BARBEIRO` | Senha de acesso do barbeiro | `barbeiro123` |
+| `SECRET_KEY` | Chave usada para assinar a sessão | `chave-de-desenvolvimento` |
+| `PORT` | Porta do servidor | `5000` |
 
-## 🔒 Credenciais de Acesso (Barbeiro)
+Em produção, defina sempre `SENHA_BARBEIRO` e `SECRET_KEY` com valores próprios.
 
-Para acessar o painel de gerenciamento do barbeiro e simular o atendimento:
-*   **Senha:** `barbeiro123`
+## Deploy
 
-## 📝 Notas de Implementação
+O `Procfile` inicia a aplicação com o Gunicorn (`web: gunicorn app:app`), o que permite publicá-la em plataformas como Render, Railway ou Heroku.
 
-*   **Persistência de dados:** Atualmente, a fila é armazenada em memória (`list` do Python). Isso significa que, se o servidor for reiniciado, a fila será resetada.
-*   **Deploy:** O código já está configurado para ler a porta a partir das variáveis de ambiente (`os.environ.get('PORT')`), facilitando o deploy em plataformas como Render ou Railway.
+## Limitações conhecidas
+
+- A fila fica em memória, então é perdida quando o servidor reinicia.
+- Pelo mesmo motivo, a aplicação deve rodar com um único worker do Gunicorn. Com vários workers, cada um teria a sua própria fila.
+
+## Possíveis melhorias
+
+- Guardar a fila em um banco de dados (por exemplo, SQLite)
+- Atualizar a fila automaticamente na tela, sem precisar recarregar
+- Adicionar testes automatizados das rotas com pytest
+- Mover o CSS para arquivos estáticos
+
+## Autor
+
+**Brenno Alves**  
+[LinkedIn](https://linkedin.com/in/brennolvs) · [GitHub](https://github.com/brennolvs)

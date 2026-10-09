@@ -179,6 +179,28 @@
             margin-bottom: 15px;
         }
 
+        /* Mensagens de retorno do servidor */
+        .mensagem {
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .mensagem-sucesso {
+            color: #155724;
+            background-color: #d4edda;
+        }
+
+        .mensagem-aviso {
+            color: #856404;
+            background-color: #fff3cd;
+        }
+
+        .mensagem-erro {
+            color: #721c24;
+            background-color: #f8d7da;
+        }
+
         /* Link de login */
         .login-link {
             text-align: center;
@@ -245,19 +267,18 @@
         </div>
         {% endif %}
 
+        {% for categoria, mensagem in get_flashed_messages(with_categories=true) %}
+        <p class="mensagem mensagem-{{ categoria }}">{{ mensagem }}</p>
+        {% endfor %}
+
         <form action="/adicionar" method="post">
-            <input type="text" name="nome" placeholder="Nome do Cliente" required>
-            <input type="text" name="telefone" placeholder="Telefone (Opcional)">
+            <input type="text" name="nome" placeholder="Nome do Cliente" maxlength="60" required>
+            <input type="text" name="telefone" placeholder="Telefone (Opcional)" maxlength="20">
             <select name="servico" required>
                 <option value="">Selecione um Serviço</option>
-                <option value="Corte">Corte Simples</option>
-                <option value="Corte + Pigmentação">Corte + Pigmentação</option>
-                <option value="Corte + Barba">Corte + Barba</option>
-                <option value="Corte + Barba + Pigmentação">Corte + Barba + Pigmentação</option>
-                <option value="Barba">Barba</option>
-                <option value="Platinado">Platinado</option>
-                <option value="Sobrancelha">Sobrancelha</option>
-                <option value="Pézinho">Pézinho</option>
+                {% for servico in servicos %}
+                <option value="{{ servico }}">{{ servico }}</option>
+                {% endfor %}
             </select>
             <button type="submit">Adicionar à Fila</button>
         </form>
@@ -266,22 +287,17 @@
 
         {% if cliente_atual %}
         <div class="cliente-atual">
-            Cliente da vez: {{ cliente_atual['nome'] }} - {{ cliente_atual['telefone'] }} ({{ cliente_atual['servico']
-            }})
+            Cliente da vez: {{ cliente_atual }}
         </div>
         {% endif %}
 
         <ul>
             {% for cliente in fila %}
-            <li class="{% if cliente_atual and cliente['nome'] == cliente_atual['nome'] %}cliente-atual{% endif %}">
-                {{ loop.index }}. {{ cliente['nome'] }} - {{ cliente['telefone'] }} ({{ cliente['servico'] }})
-            </li>
+            <li>{{ cliente.posicao }}. {{ cliente.texto }}</li>
+            {% else %}
+            <li>Ninguém na fila no momento.</li>
             {% endfor %}
         </ul>
-        
-        {% if mensagem %}
-        <p><strong>{{ mensagem }}</strong></p>
-        {% endif %}
     </div>
 </body>
 
